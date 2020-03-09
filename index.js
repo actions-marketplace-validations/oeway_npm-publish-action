@@ -66,12 +66,16 @@ async function processDirectory(dir, config, commits) {
 
   const { version } = packageObj;
 
-  checkCommit(config, commits, version);
+  if(checkCommit(config, commits, version)){
+    await createTag(dir, config, version);
+    console.log("Tag created.");
+    await publishPackage(dir, config, version);
+    console.log("Package published.");
+  }
+  else{
+    console.log("No release command detected in the commit message, finishing the job.");
+  }
 
-  await createTag(dir, config, version);
-  await publishPackage(dir, config, version);
-
-  console.log("Done.");
 }
 
 function checkCommit(config, commits, version) {
@@ -79,10 +83,10 @@ function checkCommit(config, commits, version) {
     const match = commit.message.match(config.commitPattern);
     if (match && match[1] === version) {
       console.log(`Found commit: ${commit.message}`);
-      return;
+      return true;
     }
   }
-  throw new Error(`No commit found for version: ${version}`);
+  return false;
 }
 
 async function readJson(file) {
@@ -130,7 +134,6 @@ async function createTag(dir, config, version) {
 
 async function publishPackage(dir, config, version) {
   if(config.publishWith === 'yarn') {
-    
     await run(
       dir,
       "yarn",
