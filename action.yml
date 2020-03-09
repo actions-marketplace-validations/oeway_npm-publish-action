@@ -1,5 +1,5 @@
-name: Publish to npm
-author: pascalgn
+name: tagging and publishing to npm
+author: oeway & pascalgn
 description: Automatically publish new versions to npm
 
 inputs:
