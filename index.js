@@ -30,7 +30,8 @@ async function main() {
     commitPattern,
     tagName: placeholderEnv("TAG_NAME", "v%s"),
     tagMessage: placeholderEnv("TAG_MESSAGE", "v%s"),
-    tagAuthor: { name, email }
+    tagAuthor: { getEnv("COMMIT_USER") || name, getEnv("COMMIT_EMAIL") || email },
+    publishWith: getEnv("PUBLISH_WITH") || 'yarn',
   };
 
   await processDirectory(dir, config, eventObj.commits);
@@ -128,14 +129,29 @@ async function createTag(dir, config, version) {
 }
 
 async function publishPackage(dir, config, version) {
-  await run(
-    dir,
-    "yarn",
-    "publish",
-    "--non-interactive",
-    "--new-version",
-    version
-  );
+  if(config.publishWith === 'yarn') {
+    
+    await run(
+      dir,
+      "yarn",
+      "publish",
+      "--non-interactive",
+      "--new-version",
+      version
+    );
+  }
+  else if(config.publishWith === 'npm') {
+    await run(
+      dir,
+      "npm",
+      "publish",
+      "--access",
+      "public"
+    );
+  }
+  else {
+    throw new Error(`Unsupported publish type: ${config.publishWith}`);
+  }
 
   console.log("Version has been published successfully:", version);
 }
