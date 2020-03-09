@@ -176,10 +176,10 @@ async function publishPackage(dir, config, version) {
 function run(cwd, command, ...args) {
   console.log("Executing:", command, args.join(" "));
   return new Promise((resolve, reject) => {
-    const proc = spawn(command, args, {
+    const proc = spawn(command, args.join(" "), {
       cwd,
       stdio: ["ignore", "ignore", "pipe"],
-      env: process.env,
+      shell: true,
     });
     const buffers = [];
     proc.stderr.on("data", data => buffers.push(data));
