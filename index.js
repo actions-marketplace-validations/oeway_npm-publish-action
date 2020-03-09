@@ -16,7 +16,7 @@ async function main() {
 
   if (eventObj.ref !== `refs/heads/${defaultBranch}`) {
     console.log(
-      `Ref ${eventObj.ref} is not the default branch: ${defaultBranch}`
+      `Ref ${eventObj.ref} is not the default branch: ${defaultBranch}, you must run this action on ${defaultBranch} branch.`
     );
     throw new NeutralExitError();
   }
@@ -72,7 +72,7 @@ async function processDirectory(dir, config, commits) {
       console.log("Tag created.");
     }
     catch(e){
-      console.error(e)
+      console.error('Failed to create the tag: ', e)
     }
     await publishPackage(dir, config, version);
     console.log("Package published.");
