@@ -30,7 +30,7 @@ async function main() {
     commitPattern,
     tagName: placeholderEnv("TAG_NAME", "v%s"),
     tagMessage: placeholderEnv("TAG_MESSAGE", "v%s"),
-    tagAuthor: { getEnv("COMMIT_USER") || name, getEnv("COMMIT_EMAIL") || email },
+    tagAuthor: { name: getEnv("COMMIT_USER") || name, email: getEnv("COMMIT_EMAIL") || email },
     publishWith: getEnv("PUBLISH_WITH") || 'yarn',
   };
 
