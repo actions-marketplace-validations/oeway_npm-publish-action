@@ -79,7 +79,6 @@ async function processDirectory(dir, config, commits) {
       console.error('Failed to create the tag: ', e)
     }
     await publishPackage(dir, config, version);
-    console.log("Package published.");
   }
   else{
     console.log("No release command detected in the commit message, finishing the job.");
@@ -166,6 +165,9 @@ async function publishPackage(dir, config, version) {
       "public"
     );
   }
+  else if(config.publishWith === 'skip'){
+    console.log('Skipping publishing.');
+  }
   else {
     throw new Error(`Unsupported publish type: ${config.publishWith}`);
   }
@@ -176,10 +178,9 @@ async function publishPackage(dir, config, version) {
 function run(cwd, command, ...args) {
   console.log("Executing:", command, args.join(" "));
   return new Promise((resolve, reject) => {
-    const proc = spawn(command + ' ' + args.join(" "), [], {
+    const proc = spawn(command, args, {
       cwd,
-      stdio: ["ignore", "ignore", "pipe"],
-      shell: true,
+      stdio: ["ignore", "ignore", "pipe"]
     });
     const buffers = [];
     proc.stderr.on("data", data => buffers.push(data));
