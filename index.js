@@ -176,7 +176,7 @@ async function publishPackage(dir, config, version) {
 function run(cwd, command, ...args) {
   console.log("Executing:", command, args.join(" "));
   return new Promise((resolve, reject) => {
-    const proc = spawn(command, args.join(" "), {
+    const proc = spawn(command + ' ' + args.join(" "), [], {
       cwd,
       stdio: ["ignore", "ignore", "pipe"],
       shell: true,
