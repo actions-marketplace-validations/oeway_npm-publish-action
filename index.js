@@ -67,8 +67,13 @@ async function processDirectory(dir, config, commits) {
   const { version } = packageObj;
 
   if(checkCommit(config, commits, version)){
-    await createTag(dir, config, version);
-    console.log("Tag created.");
+    try{
+      await createTag(dir, config, version);
+      console.log("Tag created.");
+    }
+    catch(e){
+      console.error(e)
+    }
     await publishPackage(dir, config, version);
     console.log("Package published.");
   }
