@@ -12,19 +12,6 @@ async function main() {
     process.env.GITHUB_EVENT_PATH || "/github/workflow/event.json";
   const eventObj = await readJson(eventFile);
 
-  const defaultBranch = getEnv("DEFAULT_BRANCH") || "master";
-
-  if (eventObj.ref !== `refs/heads/${defaultBranch}`) {
-    console.log(
-      `Ref ${eventObj.ref} is not the default branch: ${defaultBranch}, you must run this action on ${defaultBranch} branch.`
-    );
-    throw new NeutralExitError();
-  }
-  
-  if (!process.env.NPM_AUTH_TOKEN) {
-    throw new Error("No NPM_AUTH_TOKEN found in the env.")
-  }
-
   const commitPattern =
     getEnv("COMMIT_PATTERN") || "^(?:Release|Version) (\\S+)";
 
