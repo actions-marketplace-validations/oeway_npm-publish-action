@@ -21,6 +21,7 @@ inputs:
   publish_with:
     description: Publish the package with npm or yarn.
     required: false
+
 runs:
   using: docker
   image: Dockerfile
