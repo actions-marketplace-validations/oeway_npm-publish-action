@@ -12,7 +12,15 @@ inputs:
   tag_message:
     description: The message of the tag that you want to create for the version.
     required: false
-
+  commit_user:
+    description: Te user name for making git commit.
+    required: false
+  commit_email:
+    description: The email address for making git commit.
+    required: false
+  publish_with:
+    description: Publish the package with npm or yarn.
+    required: false
 runs:
   using: docker
   image: Dockerfile
