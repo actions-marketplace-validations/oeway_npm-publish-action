@@ -156,6 +156,11 @@ async function publishPackage(dir, config, version) {
     await run(
       dir,
       "npm",
+      "whoami",
+    );
+    await run(
+      dir,
+      "npm",
       "publish",
       "--access",
       "public"
