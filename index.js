@@ -20,6 +20,10 @@ async function main() {
     );
     throw new NeutralExitError();
   }
+  
+  if (!process.env.NPM_AUTH_TOKEN) {
+    throw new Error("No NPM_AUTH_TOKEN found in the env.")
+  }
 
   const commitPattern =
     getEnv("COMMIT_PATTERN") || "^(?:Release|Version) (\\S+)";
@@ -169,7 +173,8 @@ function run(cwd, command, ...args) {
   return new Promise((resolve, reject) => {
     const proc = spawn(command, args, {
       cwd,
-      stdio: ["ignore", "ignore", "pipe"]
+      stdio: ["ignore", "ignore", "pipe"],
+      env: process.env,
     });
     const buffers = [];
     proc.stderr.on("data", data => buffers.push(data));
